@@ -154,19 +154,31 @@ public class Carpeta extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * @brief Método de acción para el botón 1 (ATRÁS)
+     * @param evt: evento invocado
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Meses abrir = new Meses(imp);
         abrir.show(true);
         this.show(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    /**
+     * @brief Método de acción para el botón 2 (Siguiente)
+     * @param evt: evento invocado
+     */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         imp.setRuta(jLabel5.getText());
         Logs abrir = new Logs(imp);
         abrir.show(true);
         this.show(false);
     }//GEN-LAST:event_jButton2ActionPerformed
-
+    
+    /**
+     * @brief Método de acción para el botón 3 (Selección de ruta)
+     * @param evt: evento invocado
+     */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         j.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         Integer opt = j.showSaveDialog(this);
@@ -176,15 +188,19 @@ public class Carpeta extends javax.swing.JFrame {
             System.err.println("No se seleccionó carpeta, elegida ruta por defecto!!");
         }
     }//GEN-LAST:event_jButton3ActionPerformed
-
+    
+    /**
+     * @brief Método de accion para el campo de texto 5 (muestreo de ruta)
+     * @param evt: evento invocado
+     */
     private void jLabel5PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jLabel5PropertyChange
         // TODO add your handling code here:
     }//GEN-LAST:event_jLabel5PropertyChange
 
     /**
-     * @param args the command line arguments
+     * @brief Funcion principal de sección de carpeta de salida
      */
-    public static void main(String args[]) {
+    public static void main() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
