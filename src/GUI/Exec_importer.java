@@ -6,11 +6,8 @@
 package GUI;
 
 import Utilidades.Importador;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -44,69 +41,101 @@ public class Exec_importer extends javax.swing.JFrame {
         //Creamos un Thread para el lanzamiento en background
         final Thread t;
         //Inicializamos
-        t = new Thread(new Runnable() {
-            //Implementamos el método run()
-            @Override
-            public void run() {
-                //Permite mostrar el valor del progreso
-                jProgressBar1.setStringPainted(true);
-                int x = 1;
-                //Creamos el folder de trabajo
-                File carpeta = new File(imp.getRuta());
-                if(!carpeta.exists() || !carpeta.isDirectory()){
-                    carpeta.mkdir();
-                }
-                //Guardamos parametros de configuracion e iniciamos el verbose
-                imp.setWritter(">>>>> PARAMETROS DE CONFIGURACIÓN PARA LA IMPORTACIÓN <<<<<");
-                imp.setWritter("Año de inicio: "+Integer.toString(imp.getanioInicio()));
-                imp.setWritter("Año de fin: "+Integer.toString(imp.getanioFin()));
-                imp.setWritter("Mes de inicio: "+imp.getmesInicio());
-                imp.setWritter("Mes de inicio: "+imp.getmesFin());
-                imp.setWritter("Ruta de guardado: "+imp.getRuta());
-                imp.setWritter("Enlace de patron: "+imp.getUrl());
-                imp.setWritter("Generación de log: "+imp.getLogs());
-                if(imp.getResumen()==true){
-                    imp.setWritter("Modo de uso: Resumen");
+        t = new Thread(() -> {
+            //Permite mostrar el valor del progreso
+            jProgressBar1.setStringPainted(true);
+            int x1 = 1;
+            //Creamos el folder de trabajo
+            File carpeta = new File(imp.getRuta());
+            if(!carpeta.exists() || !carpeta.isDirectory()){
+                carpeta.mkdir();
+            }
+            //Guardamos parametros de configuracion e iniciamos el verbose
+            imp.setWritter(">>>>> PARAMETROS DE CONFIGURACIÓN PARA LA IMPORTACIÓN <<<<<");
+            imp.setWritter("Año de inicio: "+Integer.toString(imp.getanioInicio()));
+            imp.setWritter("Año de fin: "+Integer.toString(imp.getanioFin()));
+            imp.setWritter("Mes de inicio: "+imp.getmesInicio());
+            imp.setWritter("Mes de inicio: "+imp.getmesFin());
+            imp.setWritter("Ruta de guardado: "+imp.getRuta());
+            imp.setWritter("Enlace de patron: "+imp.getUrl());
+            imp.setWritter("Generación de log: "+imp.getLogs());
+            if(imp.getResumen()==true){
+                imp.setWritter("Modo de uso: Resumen");
+            }else{
+                imp.setWritter("Modo de uso: Completo");
+            }
+            imp.setWritter(">>>>> FIN DE ZONA DE PARAMETROS <<<<<");
+            imp.setWritter("");
+            imp.setWritter("");
+            imp.setWritter("############ MODO VERBOSE ACTIVADO ############");
+            imp.setWritter("");
+            //Fin de importacion de log
+            imp.setWritter("************** Creando carpeta de trabajo*************");
+            imp.setWritter("Ruta: "+carpeta.toString());
+            //Creamos un bucle
+            for (int i = imp.getanioInicio()-2000; i<=imp.getanioFin()-2000; i++) {
+                //Crear subcarpeta con el año
+                File subcarpeta = null;
+                if(System.getProperty("os.name").contains("Windows")){
+                    subcarpeta = new File(imp.getRuta()+"\\"+(i+2000));
                 }else{
-                    imp.setWritter("Modo de uso: Completo");
+                    subcarpeta = new File(imp.getRuta()+"/"+(i+2000));
                 }
-                imp.setWritter(">>>>> FIN DE ZONA DE PARAMETROS <<<<<");
-                imp.setWritter("");
-                imp.setWritter("");
-                imp.setWritter("############ MODO VERBOSE ACTIVADO ############");
-                imp.setWritter("");
-                //Fin de importacion de log
-                imp.setWritter("************** Creando carpeta de trabajo*************");
-                imp.setWritter("Ruta: "+carpeta.toString());
-                
-
-                //Creamos un bucle
-                for(int i=imp.getanioInicio()-2000;i<=imp.getanioFin()-2000;i++){
-                    //Crear subcarpeta con el año
-                    File subcarpeta = null;
-                    if(System.getProperty("os.name").contains("Windows")){
-                        subcarpeta = new File(imp.getRuta()+"\\"+(i+2000));
-                    }else{
-                        subcarpeta = new File(imp.getRuta()+"/"+(i+2000));
-                    }
-                    if(!subcarpeta.exists() || !subcarpeta.isDirectory()){
-                        subcarpeta.mkdir();
-                        imp.setWritter("************** Creando subcarpeta de trabajo*************");
-                        imp.setWritter("Ruta: "+subcarpeta.toString());
-                    }
-                    imp.setWritter("--- IMPORTANDO A LA SUBCARPETA: "+(i+2000)+" ---");
-                    for(int j=indexMesInicio;j<=indexMesFin;j++){
-                        //Obtenemos los recursos de internet con el patron
+                if(!subcarpeta.exists() || !subcarpeta.isDirectory()){
+                    subcarpeta.mkdir();
+                    imp.setWritter("************** Creando subcarpeta de trabajo*************");
+                    imp.setWritter("Ruta: "+subcarpeta.toString());
+                }
+                imp.setWritter("--- IMPORTANDO A LA SUBCARPETA: "+(i+2000)+" ---");
+                for (int j = indexMesInicio; j<=indexMesFin; j++) {
+                    //Obtenemos los recursos de internet con el patron
+                    try{
+                        //System.out.println(imp.getUrl()+meses[j]+String.format("%02d", i)+".txt");
+                        URL url = null;
+                        if(imp.getResumen() == true){
+                            url = new URL(imp.getUrl()+meses[j]+String.format("%02d", i)+"NOAAMO.txt");
+                        }else{
+                            if(meses[j].contains("marzo") && (i+2000) == 2007){
+                                url = new URL(imp.getUrl()+meses[j]+"%20"+String.format("%02d", i)+".txt");
+                            }else{
+                                url = new URL(imp.getUrl()+meses[j]+String.format("%02d", i)+".txt");
+                            }
+                        }
+                        imp.setWritter("Obteniendo fichero via URL. Ruta: "+url.toString());
+                        URLConnection urlCon = url.openConnection();
+                        imp.setWritter("Abriendo pasarela de E-S.");
+                        
+                        InputStream is = urlCon.getInputStream();
+                        FileOutputStream fos = null;
+                        if(imp.getResumen()==true){
+                            fos = new FileOutputStream(subcarpeta+"/"+meses[j]+String.format("%02d", i)+"-resumen.txt");
+                        }else{
+                            fos = new FileOutputStream(subcarpeta+"/"+meses[j]+String.format("%02d", i)+".txt");
+                        }
+                        
+                        int b = 0;
+                        while (b != -1) {
+                            b = is.read();
+                            if (b != -1)
+                                fos.write(b);
+                        }
+                        
+                        is.close();
+                        fos.close();
+                        imp.setWritter("Fichero importado. Ruta "+subcarpeta+"/"+meses[j]+String.format("%02d", i)+".txt");
+                        imp.setWritter("");
+                        
+                    }catch(Exception e){
                         try{
                             //System.out.println(imp.getUrl()+meses[j]+String.format("%02d", i)+".txt");
                             URL url = null;
                             if(imp.getResumen() == true){
-                                url = new URL(imp.getUrl()+meses[j]+String.format("%02d", i)+"NOAAMO.txt");
+                                url = new URL(imp.getUrl()+meses[j]+String.format("%02d", i)+"NOAAMO.TXT");
                             }else{
                                 if(meses[j].contains("marzo") && (i+2000) == 2007){
-                                    url = new URL(imp.getUrl()+meses[j]+"%20"+String.format("%02d", i)+".txt");
+                                    url = new URL(imp.getUrl()+meses[j]+"%20"+String.format("%02d", i)+".TXT");
                                 }else{
-                                    url = new URL(imp.getUrl()+meses[j]+String.format("%02d", i)+".txt");
+                                    url = new URL(imp.getUrl()+meses[j]+String.format("%02d", i)+".TXT");
                                 }
                             }
                             imp.setWritter("Obteniendo fichero via URL. Ruta: "+url.toString());
@@ -120,74 +149,37 @@ public class Exec_importer extends javax.swing.JFrame {
                             }else{
                                 fos = new FileOutputStream(subcarpeta+"/"+meses[j]+String.format("%02d", i)+".txt");
                             }
-
                             int b = 0;
                             while (b != -1) {
-                              b = is.read();
-                              if (b != -1)
-                                fos.write(b);
+                                b = is.read();
+                                if (b != -1)
+                                    fos.write(b);
                             }
 
                             is.close();
                             fos.close();
                             imp.setWritter("Fichero importado. Ruta "+subcarpeta+"/"+meses[j]+String.format("%02d", i)+".txt");
                             imp.setWritter("");
-
-                        }catch(Exception e){
-                            try{
-                                //System.out.println(imp.getUrl()+meses[j]+String.format("%02d", i)+".txt");
-                                URL url = null;
-                                if(imp.getResumen() == true){
-                                    url = new URL(imp.getUrl()+meses[j]+String.format("%02d", i)+"NOAAMO.TXT");
-                                }else{
-                                    if(meses[j].contains("marzo") && (i+2000) == 2007){
-                                        url = new URL(imp.getUrl()+meses[j]+"%20"+String.format("%02d", i)+".TXT");
-                                    }else{
-                                        url = new URL(imp.getUrl()+meses[j]+String.format("%02d", i)+".TXT");
-                                    }
-                                }   
-                                imp.setWritter("Obteniendo fichero via URL. Ruta: "+url.toString());
-                                URLConnection urlCon = url.openConnection();
-                                imp.setWritter("Abriendo pasarela de E-S.");
-                                
-                                InputStream is = urlCon.getInputStream();
-                                FileOutputStream fos = null;
-                                if(imp.getResumen()==true){
-                                    fos = new FileOutputStream(subcarpeta+"/"+meses[j]+String.format("%02d", i)+"-resumen.txt");
-                                }else{
-                                    fos = new FileOutputStream(subcarpeta+"/"+meses[j]+String.format("%02d", i)+".txt");
-                                }
-                                int b = 0;
-                                while (b != -1) {
-                                  b = is.read();
-                                  if (b != -1)
-                                    fos.write(b);
-                                }
-
-                                is.close();
-                                fos.close();
-                                imp.setWritter("Fichero importado. Ruta "+subcarpeta+"/"+meses[j]+String.format("%02d", i)+".txt");
-                                imp.setWritter("");
-
-                            }catch(Exception err){
-                                imp.setWritter("El recurso "+meses[j]+String.format("%02d", i)+".txt"+" no ha podido ser localizado!!");
-                                imp.setWritter("");
-                                
-                            }
+                            
+                        }catch(Exception err){
+                            imp.setWritter("El recurso "+meses[j]+String.format("%02d", i)+".txt"+" no ha podido ser localizado!!");
+                            imp.setWritter("");
+                            
                         }
-                        jProgressBar1.setValue(x);
-                        x++;
                     }
-                    imp.setWritter("--- FIN DE IMPORTADO A LA SUBCARPETA: "+(i+2000)+" ---");
-                    imp.setWritter("");
+                    jProgressBar1.setValue(x1);
+                    x1++;
                 }
-                imp.setWritter(" --- --- --- IMPORTACIÓN AL EQUIPO FINALIZADA --- --- ---");
-                //Pruebas de ejecución tras terminar
-                Mensaje_Final abrir = new Mensaje_Final(imp);
-                abrir.show(true);
-                Exec_importer.this.show(false);
+                imp.setWritter("--- FIN DE IMPORTADO A LA SUBCARPETA: "+(i+2000)+" ---");
+                imp.setWritter("");
             }
-        });
+            imp.setWritter(" --- --- --- IMPORTACIÓN AL EQUIPO FINALIZADA --- --- ---");
+            //Pruebas de ejecución tras terminar
+            Mensaje_Final abrir = new Mensaje_Final(imp);
+            abrir.show(true);
+            Exec_importer.this.show(false);
+        } //Implementamos el método run()
+        );
         t.start();
     }
 
