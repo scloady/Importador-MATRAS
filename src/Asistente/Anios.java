@@ -9,7 +9,6 @@ import Utilidades.Importador;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Vector;
 import javax.swing.ImageIcon;
 
 /**
@@ -20,6 +19,7 @@ public class Anios extends javax.swing.JFrame {
 
     /**
      * Creates new form Anios
+     * @param _imp: objeto importador
      */
     public Anios(Utilidades.Importador _imp) {
         this.imp=_imp;
