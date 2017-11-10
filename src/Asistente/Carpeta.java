@@ -7,8 +7,6 @@ package Asistente;
 
 import Utilidades.Importador;
 import java.awt.Image;
-import java.util.ArrayList;
-import java.util.Calendar;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 
@@ -20,6 +18,7 @@ public class Carpeta extends javax.swing.JFrame {
 
     /**
      * Creates new form Anios
+     * @param _imp: objeto importador
      */
     public Carpeta(Utilidades.Importador _imp) {
         this.imp = _imp;
