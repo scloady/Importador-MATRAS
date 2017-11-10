@@ -114,6 +114,10 @@ public class Inicio extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * @brief Método de acción para el botón 1 (Importar Resumenes)
+     * @param evt: evento invocado
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         imp.setUrl("http://www.ujaen.es/dep/fisica/estacion/Medias%20mes%20a%20mes/");
         imp.setResumen(true);
@@ -122,6 +126,10 @@ public class Inicio extends javax.swing.JFrame {
         this.show(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    /**
+     * @brief Método de acción para el botón 2 (Importar historial completo)
+     * @param evt: evento invocado
+     */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         Anios abrir = new Anios(imp);
         abrir.show(true);
