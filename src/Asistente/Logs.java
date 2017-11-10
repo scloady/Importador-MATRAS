@@ -7,8 +7,6 @@ package Asistente;
 
 import Utilidades.Importador;
 import java.awt.Image;
-import java.util.ArrayList;
-import java.util.Calendar;
 import javax.swing.ImageIcon;
 
 /**
@@ -19,6 +17,7 @@ public class Logs extends javax.swing.JFrame {
 
     /**
      * Creates new form Anios
+     * @param _imp: objeto importador
      */
     public Logs(Utilidades.Importador _imp) {
         this.imp = _imp;
@@ -135,19 +134,31 @@ public class Logs extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * @brief Método de acción para el botón 1 (ATRÁS)
+     * @param evt: evento invocado
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Carpeta abrir = new Carpeta(imp);
         abrir.show(true);
         this.show(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    /**
+     * @brief Método de acción para el botón 2 (Siguiente)
+     * @param evt: evento invocado
+     */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         Fin_Asistente abrir = new Fin_Asistente(imp);
         abrir.show(true);
         this.show(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    /**
+     * @brief Método de acción para el checkbox del log
+     * @param evt: evento invocado
+     */
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         // TODO add your handling code here:
         if(jCheckBox1.isSelected()==false){
@@ -158,9 +169,9 @@ public class Logs extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     /**
-     * @param args the command line arguments
+     * @brief: Funcion principal para el log
      */
-    public static void main(String args[]) {
+    public static void main() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -178,10 +189,8 @@ public class Logs extends javax.swing.JFrame {
         }
         //</editor-fold>
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Logs(new Importador()).setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Logs(new Importador()).setVisible(true);
         });
     }
     //Creamos objeto importador
