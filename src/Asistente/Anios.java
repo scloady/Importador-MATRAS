@@ -173,7 +173,11 @@ public class Anios extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * @brief Método de acción para la caja de selección de año de inicio
+     * @param evt: evento de seleccion 
+     */
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
         imp.setanioInicio(Integer.parseInt(jComboBox1.getSelectedItem().toString()));
@@ -183,7 +187,11 @@ public class Anios extends javax.swing.JFrame {
             jButton2.setEnabled(true);
         }
     }//GEN-LAST:event_jComboBox1ActionPerformed
-
+    
+    /**
+     * @brief Método de acción para la caja de selección de año de fin
+     * @param evt: evento de selección
+     */
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
         // TODO add your handling code here:
         imp.setanioFin(Integer.parseInt(jComboBox2.getSelectedItem().toString()));
@@ -193,13 +201,21 @@ public class Anios extends javax.swing.JFrame {
             jButton2.setEnabled(true);
         }
     }//GEN-LAST:event_jComboBox2ActionPerformed
-
+    
+    /**
+     * @brief Método de acción para el botón 1 (ATRÁS)
+     * @param evt: evento invocado
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Inicio abrir = new Inicio(imp);
         abrir.show(true);
         this.show(false);
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
+    /**
+     * @brief Método de acción para el botón 2 (Siguiente)
+     * @param evt: evento invocado
+     */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         Meses abrir = new Meses(imp);
         abrir.show(true);
@@ -207,9 +223,9 @@ public class Anios extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
-     * @param args the command line arguments
+     * @brief Funcion principal de sección de años
      */
-    public static void main(String args[]) {
+    public static void main() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
