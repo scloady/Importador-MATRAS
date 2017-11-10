@@ -5,7 +5,6 @@
  */
 package GUI;
 
-import Asistente.*;
 import java.awt.Desktop;
 import java.awt.Image;
 import java.io.File;
@@ -21,6 +20,7 @@ public class Mensaje_Final extends javax.swing.JFrame {
 
     /**
      * Creates new form Inicio
+     * @param _imp: objeto de importacion 
      */
     public Mensaje_Final(Utilidades.Importador _imp) {
         this.imp = _imp;
@@ -100,7 +100,11 @@ public class Mensaje_Final extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * @brief Método de acción para el botón 1 (Finalizar y abrir carpeta de exportación)
+     * @param evt: Evento invocado
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try{
             Desktop.getDesktop().open(new File(imp.getRuta()));
@@ -113,9 +117,9 @@ public class Mensaje_Final extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
-     * @param args the command line arguments
+     * @brief Funcion principal para mensaje final de asistente
      */
-    public static void main(String args[]) {
+    public static void main() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
