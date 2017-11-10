@@ -24,6 +24,7 @@ public class Exec_importer extends javax.swing.JFrame {
 
     /**
      * Creates new form Inicio
+     * @param _imp: Objeto de importacion
      */
     public Exec_importer(Utilidades.Importador _imp) {
         this.imp = _imp;
@@ -40,7 +41,7 @@ public class Exec_importer extends javax.swing.JFrame {
     }
     
     private void inicio(){
-        //Creamos un Thread para mejorar el ejemplo
+        //Creamos un Thread para el lanzamiento en background
         final Thread t;
         //Inicializamos
         t = new Thread(new Runnable() {
@@ -54,52 +55,29 @@ public class Exec_importer extends javax.swing.JFrame {
                 File carpeta = new File(imp.getRuta());
                 if(!carpeta.exists() || !carpeta.isDirectory()){
                     carpeta.mkdir();
-                    //Guardamos parametros de configuracion e iniciamos el verbose
-                    imp.setWritter(">>>>> PARAMETROS DE CONFIGURACIÓN PARA LA IMPORTACIÓN <<<<<");
-                    imp.setWritter("Año de inicio: "+Integer.toString(imp.getanioInicio()));
-                    imp.setWritter("Año de fin: "+Integer.toString(imp.getanioFin()));
-                    imp.setWritter("Mes de inicio: "+imp.getmesInicio());
-                    imp.setWritter("Mes de inicio: "+imp.getmesFin());
-                    imp.setWritter("Ruta de guardado: "+imp.getRuta());
-                    imp.setWritter("Enlace de patron: "+imp.getUrl());
-                    imp.setWritter("Generación de log: "+imp.getLogs());
-                    if(imp.getResumen()==true){
-                        imp.setWritter("Modo de uso: Resumen");
-                    }else{
-                        imp.setWritter("Modo de uso: Completo");
-                    }
-                    imp.setWritter(">>>>> FIN DE ZONA DE PARAMETROS <<<<<");
-                    imp.setWritter("");
-                    imp.setWritter("");
-                    imp.setWritter("############ MODO VERBOSE ACTIVADO ############");
-                    imp.setWritter("");
-                    //Fin de importacion de log
-                    imp.setWritter("************** Creando carpeta de trabajo*************");
-                    imp.setWritter("Ruta: "+carpeta.toString());
-                }else{
-                    //Guardamos parametros de configuracion e iniciamos el verbose
-                    imp.setWritter(">>>>> PARAMETROS DE CONFIGURACIÓN PARA LA IMPORTACIÓN <<<<<");
-                    imp.setWritter("Año de inicio: "+Integer.toString(imp.getanioInicio()));
-                    imp.setWritter("Año de fin: "+Integer.toString(imp.getanioFin()));
-                    imp.setWritter("Mes de inicio: "+imp.getmesInicio());
-                    imp.setWritter("Mes de inicio: "+imp.getmesFin());
-                    imp.setWritter("Ruta de guardado: "+imp.getRuta());
-                    imp.setWritter("Enlace de patron: "+imp.getUrl());
-                    imp.setWritter("Generación de log: "+imp.getLogs());
-                    if(imp.getResumen()==true){
-                        imp.setWritter("Modo de uso: Resumen");
-                    }else{
-                        imp.setWritter("Modo de uso: Completo");
-                    }
-                    imp.setWritter(">>>>> FIN DE ZONA DE PARAMETROS <<<<<");
-                    imp.setWritter("");
-                    imp.setWritter("");
-                    imp.setWritter("############ MODO VERBOSE ACTIVADO ############");
-                    imp.setWritter("");
-                    //Fin de importacion de log
-                    imp.setWritter("************** Carpeta de trabajo para usar *************");
-                    imp.setWritter("Ruta: "+carpeta.toString());
                 }
+                //Guardamos parametros de configuracion e iniciamos el verbose
+                imp.setWritter(">>>>> PARAMETROS DE CONFIGURACIÓN PARA LA IMPORTACIÓN <<<<<");
+                imp.setWritter("Año de inicio: "+Integer.toString(imp.getanioInicio()));
+                imp.setWritter("Año de fin: "+Integer.toString(imp.getanioFin()));
+                imp.setWritter("Mes de inicio: "+imp.getmesInicio());
+                imp.setWritter("Mes de inicio: "+imp.getmesFin());
+                imp.setWritter("Ruta de guardado: "+imp.getRuta());
+                imp.setWritter("Enlace de patron: "+imp.getUrl());
+                imp.setWritter("Generación de log: "+imp.getLogs());
+                if(imp.getResumen()==true){
+                    imp.setWritter("Modo de uso: Resumen");
+                }else{
+                    imp.setWritter("Modo de uso: Completo");
+                }
+                imp.setWritter(">>>>> FIN DE ZONA DE PARAMETROS <<<<<");
+                imp.setWritter("");
+                imp.setWritter("");
+                imp.setWritter("############ MODO VERBOSE ACTIVADO ############");
+                imp.setWritter("");
+                //Fin de importacion de log
+                imp.setWritter("************** Creando carpeta de trabajo*************");
+                imp.setWritter("Ruta: "+carpeta.toString());
                 
 
                 //Creamos un bucle
@@ -283,14 +261,18 @@ public class Exec_importer extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * @brief Método de acción para el botón 1 (Minimizar)
+     * @param evt: Evento de acción
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.setExtendedState(ICONIFIED);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
-     * @param args the command line arguments
+     * @brief Funcion principal de sección de ejecución de la importación
      */
-    public static void main(String args[]) {
+    public static void main() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
