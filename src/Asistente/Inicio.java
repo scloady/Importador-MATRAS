@@ -17,6 +17,7 @@ public class Inicio extends javax.swing.JFrame {
 
     /**
      * Creates new form Inicio
+     * @param _imp: objeto importador
      */
     public Inicio(Utilidades.Importador _imp) {
         this.imp = _imp;
