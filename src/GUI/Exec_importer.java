@@ -8,9 +8,12 @@ package GUI;
 import Utilidades.Importador;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Scanner;
 
 
 /**
@@ -106,23 +109,28 @@ public class Exec_importer extends javax.swing.JFrame {
                         imp.setWritter("Abriendo pasarela de E-S.");
                         
                         InputStream is = urlCon.getInputStream();
-                        FileOutputStream fos = null;
+                        //Cambio de tecnica, en vez de cargar bytes y flujos, cargamos el flujo remoto y se convierte
+                        String guardado = null;
                         if(imp.getResumen()==true){
-                            fos = new FileOutputStream(subcarpeta+"/"+meses[j]+String.format("%02d", i)+"-resumen.txt");
+                            guardado = subcarpeta+"/"+meses[j]+String.format("%02d", i)+"-resumen.csv";
                         }else{
-                            fos = new FileOutputStream(subcarpeta+"/"+meses[j]+String.format("%02d", i)+".txt");
+                            guardado = subcarpeta+"/"+meses[j]+String.format("%02d", i)+".csv";
                         }
-                        
-                        int b = 0;
-                        while (b != -1) {
-                            b = is.read();
-                            if (b != -1)
-                                fos.write(b);
+                        Scanner s = new Scanner(is).useDelimiter("\\A");
+                        String result = s.hasNext() ? s.next() : "";
+                        result = result.replaceAll("\t", ",");
+                        String linea=result;
+                        try (
+                            FileWriter fichero = new FileWriter(guardado, true)) {
+                            //Escribimos
+                            fichero.write(linea+"\n");
+                            //Cerramos el fichero
+                        }catch (IOException ex) {
+                            System.out.println("\nRecreando el fichero de guardado!!!");
                         }
-                        
                         is.close();
-                        fos.close();
-                        imp.setWritter("Fichero importado. Ruta "+subcarpeta+"/"+meses[j]+String.format("%02d", i)+".txt");
+                        
+                        imp.setWritter("Fichero importado. Ruta "+subcarpeta+"/"+meses[j]+String.format("%02d", i)+".csv");
                         imp.setWritter("");
                         
                     }catch(Exception e){
@@ -143,26 +151,33 @@ public class Exec_importer extends javax.swing.JFrame {
                             imp.setWritter("Abriendo pasarela de E-S.");
 
                             InputStream is = urlCon.getInputStream();
-                            FileOutputStream fos = null;
+                            //Cambio de tecnica, en vez de cargar bytes y flujos, cargamos el flujo remoto y se convierte
+                            String guardado = null;
                             if(imp.getResumen()==true){
-                                fos = new FileOutputStream(subcarpeta+"/"+meses[j]+String.format("%02d", i)+"-resumen.txt");
+                                guardado = subcarpeta+"/"+meses[j]+String.format("%02d", i)+"-resumen.csv";
                             }else{
-                                fos = new FileOutputStream(subcarpeta+"/"+meses[j]+String.format("%02d", i)+".txt");
+                                guardado = subcarpeta+"/"+meses[j]+String.format("%02d", i)+".csv";
                             }
-                            int b = 0;
-                            while (b != -1) {
-                                b = is.read();
-                                if (b != -1)
-                                    fos.write(b);
+                            Scanner s = new Scanner(is).useDelimiter("\\A");
+                            String result = s.hasNext() ? s.next() : "";
+                            result = result.replaceAll("\t", ",");
+                            String linea=result;
+                            try (
+                                FileWriter fichero = new FileWriter(guardado, true)) {
+                                //Escribimos
+                                fichero.write(linea+"\n");
+                                //Cerramos el fichero
+                            }catch (IOException ex) {
+                                System.out.println("\nRecreando el fichero de guardado!!!");
                             }
 
                             is.close();
-                            fos.close();
-                            imp.setWritter("Fichero importado. Ruta "+subcarpeta+"/"+meses[j]+String.format("%02d", i)+".txt");
+                            
+                            imp.setWritter("Fichero importado. Ruta "+subcarpeta+"/"+meses[j]+String.format("%02d", i)+".csv");
                             imp.setWritter("");
                             
                         }catch(Exception err){
-                            imp.setWritter("El recurso "+meses[j]+String.format("%02d", i)+".txt"+" no ha podido ser localizado!!");
+                            imp.setWritter("El recurso "+meses[j]+String.format("%02d", i)+".csv"+" no ha podido ser localizado!!");
                             imp.setWritter("");
                             
                         }
