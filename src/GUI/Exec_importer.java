@@ -40,6 +40,9 @@ public class Exec_importer extends javax.swing.JFrame {
         inicio();
     }
     
+    /**
+     * @brief Clase inicio, que crea 2 hilos, uno de procesamiento de datos y otro de animacion de barra de progreso 
+     */
     private void inicio(){
         //Creamos un Thread para el lanzamiento en background
         final Thread t;
@@ -80,9 +83,9 @@ public class Exec_importer extends javax.swing.JFrame {
                 //Crear subcarpeta con el año
                 File subcarpeta = null;
                 if(System.getProperty("os.name").contains("Windows")){
-                    subcarpeta = new File(imp.getRuta()+"\\"+(i+2000));
+                    subcarpeta = new File(imp.getRuta()+"\\");
                 }else{
-                    subcarpeta = new File(imp.getRuta()+"/"+(i+2000));
+                    subcarpeta = new File(imp.getRuta()+"/");
                 }
                 if(!subcarpeta.exists() || !subcarpeta.isDirectory()){
                     subcarpeta.mkdir();
@@ -91,10 +94,14 @@ public class Exec_importer extends javax.swing.JFrame {
                 }
                 imp.setWritter("--- IMPORTANDO A LA SUBCARPETA: "+(i+2000)+" ---");
                 for (int j = indexMesInicio; j<=indexMesFin; j++) {
+                    URL url = null;
+                    InputStream is = null;
+                    URLConnection urlCon = null;
+                    String guardado = null;
+                    boolean busqueda=false;
                     //Obtenemos los recursos de internet con el patron
                     try{
                         //System.out.println(imp.getUrl()+meses[j]+String.format("%02d", i)+".txt");
-                        URL url = null;
                         if(imp.getResumen() == true){
                             url = new URL(imp.getUrl()+meses[j]+String.format("%02d", i)+"NOAAMO.txt");
                         }else{
@@ -105,38 +112,19 @@ public class Exec_importer extends javax.swing.JFrame {
                             }
                         }
                         imp.setWritter("Obteniendo fichero via URL. Ruta: "+url.toString());
-                        URLConnection urlCon = url.openConnection();
+                        urlCon = url.openConnection();
                         imp.setWritter("Abriendo pasarela de E-S.");
                         
-                        InputStream is = urlCon.getInputStream();
-                        //Cambio de tecnica, en vez de cargar bytes y flujos, cargamos el flujo remoto y se convierte
-                        String guardado = null;
-                        if(imp.getResumen()==true){
-                            guardado = subcarpeta+"/"+meses[j]+String.format("%02d", i)+"-resumen.csv";
-                        }else{
-                            guardado = subcarpeta+"/"+meses[j]+String.format("%02d", i)+".csv";
-                        }
-                        Scanner s = new Scanner(is).useDelimiter("\\A");
-                        String result = s.hasNext() ? s.next() : "";
-                        result = result.replaceAll("\t", ",");
-                        String linea=result;
-                        try (
-                            FileWriter fichero = new FileWriter(guardado, true)) {
-                            //Escribimos
-                            fichero.write(linea+"\n");
-                            //Cerramos el fichero
-                        }catch (IOException ex) {
-                            System.out.println("\nRecreando el fichero de guardado!!!");
-                        }
-                        is.close();
+                        is = urlCon.getInputStream();
                         
-                        imp.setWritter("Fichero importado. Ruta "+subcarpeta+"/"+meses[j]+String.format("%02d", i)+".csv");
+                        busqueda = true;
+                        
+                        imp.setWritter("Cabecera del mes "+meses[j]+" del año "+String.format("%02d", i)+"importada correctamente");
                         imp.setWritter("");
                         
-                    }catch(Exception e){
+                    }catch(IOException e){
                         try{
                             //System.out.println(imp.getUrl()+meses[j]+String.format("%02d", i)+".txt");
-                            URL url = null;
                             if(imp.getResumen() == true){
                                 url = new URL(imp.getUrl()+meses[j]+String.format("%02d", i)+"NOAAMO.TXT");
                             }else{
@@ -147,45 +135,62 @@ public class Exec_importer extends javax.swing.JFrame {
                                 }
                             }
                             imp.setWritter("Obteniendo fichero via URL. Ruta: "+url.toString());
-                            URLConnection urlCon = url.openConnection();
+                            urlCon = url.openConnection();
                             imp.setWritter("Abriendo pasarela de E-S.");
 
-                            InputStream is = urlCon.getInputStream();
-                            //Cambio de tecnica, en vez de cargar bytes y flujos, cargamos el flujo remoto y se convierte
-                            String guardado = null;
-                            if(imp.getResumen()==true){
-                                guardado = subcarpeta+"/"+meses[j]+String.format("%02d", i)+"-resumen.csv";
-                            }else{
-                                guardado = subcarpeta+"/"+meses[j]+String.format("%02d", i)+".csv";
-                            }
-                            Scanner s = new Scanner(is).useDelimiter("\\A");
-                            String result = s.hasNext() ? s.next() : "";
-                            result = result.replaceAll("\t", ",");
-                            String linea=result;
-                            try (
-                                FileWriter fichero = new FileWriter(guardado, true)) {
-                                //Escribimos
-                                fichero.write(linea+"\n");
-                                //Cerramos el fichero
-                            }catch (IOException ex) {
-                                System.out.println("\nRecreando el fichero de guardado!!!");
-                            }
-
-                            is.close();
+                            is = urlCon.getInputStream();
                             
-                            imp.setWritter("Fichero importado. Ruta "+subcarpeta+"/"+meses[j]+String.format("%02d", i)+".csv");
+                            busqueda = true;
+                            
+                            imp.setWritter("Cabecera del mes "+meses[j]+" del año "+String.format("%02d", i)+"importada correctamente");
                             imp.setWritter("");
                             
-                        }catch(Exception err){
-                            imp.setWritter("El recurso "+meses[j]+String.format("%02d", i)+".csv"+" no ha podido ser localizado!!");
+                        }catch(IOException err){
+                            imp.setWritter("El recurso "+meses[j]+String.format("%02d", i)+".txt"+" no ha podido ser localizado!!");
                             imp.setWritter("");
                             
                         }
                     }
                     jProgressBar1.setValue(x1);
                     x1++;
+                    
+                    /***********************************************************************/
+                    /*              INICIO DE ZONA DE PROCESAMIENTO DE DATOS               */
+                    /***********************************************************************/
+                    
+                    //Solo realizaremos la inserccion en fichero si la URL esta disponible
+                    if(busqueda){
+                        //Cargamos solo las cabeceras de cada uno de los meses y años
+                        if(imp.getResumen()==true){
+                            guardado = subcarpeta+"/"+"cabeceras-resumen.csv";
+                        }else{
+                            guardado = subcarpeta+"/"+"cabeceras"+".csv";
+                        }
+                        Scanner s = new Scanner(is).useDelimiter("\\A");
+                        String result = s.hasNext() ? s.next() : "";
+                        result = result.replaceAll("\t", ",");
+                        String linea=result;
+                        String[] lineas = linea.split("\n");
+                        try (FileWriter fichero = new FileWriter(guardado, true)) {
+                            //Escribimos la info de la cabecera y la cabecera compuesta
+                            fichero.write("Cabecera: "+meses[j]+" del "+(2000+i)+"\n");
+                            fichero.write(lineas[0]+"\n");
+                            fichero.write(lineas[1]+"\n");
+                        }catch (IOException ex) {
+                            System.out.println("\nRecreando el fichero de guardado!!!");
+                        }
+                        //Cerramos el fichero
+                        try{
+                            is.close();
+                        }catch(IOException p){
+                            System.err.println("No se ha podido cerrar de forma correcta el flujo de entrada!?");
+                        }
+                        /**********************************************************************/
+                        /*                  FIN DE ZONA DE PROCESAMIENTO DE DATOS             */
+                        /**********************************************************************/
+                    }
                 }
-                imp.setWritter("--- FIN DE IMPORTADO A LA SUBCARPETA: "+(i+2000)+" ---");
+                imp.setWritter("--- FIN DE IMPORTADO DE CABECERAS DEL AÑO: "+(i+2000)+" ---");
                 imp.setWritter("");
             }
             imp.setWritter(" --- --- --- IMPORTACIÓN AL EQUIPO FINALIZADA --- --- ---");
