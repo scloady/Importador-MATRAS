@@ -5,9 +5,9 @@
  */
 package GUI;
 
+import Utilidades.Cabeceras;
 import Utilidades.Importador;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -120,10 +120,14 @@ public class Exec_importer extends javax.swing.JFrame {
                         String result = s.hasNext() ? s.next() : "";
                         result = result.replaceAll("\t", ",");
                         String linea=result;
-                        try (
-                            FileWriter fichero = new FileWriter(guardado, true)) {
+                        String[] lineas = linea.split("\n");
+                        try (FileWriter fichero = new FileWriter(guardado, true)) {
                             //Escribimos
-                            fichero.write(linea+"\n");
+                            fichero.write(cab.getCabecera(j, i)+"\n");
+                            for(int k=2;k<lineas.length;k++){
+                                
+                                fichero.write(lineas[k]+"\n");
+                            }
                             //Cerramos el fichero
                         }catch (IOException ex) {
                             System.out.println("\nRecreando el fichero de guardado!!!");
@@ -162,10 +166,13 @@ public class Exec_importer extends javax.swing.JFrame {
                             String result = s.hasNext() ? s.next() : "";
                             result = result.replaceAll("\t", ",");
                             String linea=result;
-                            try (
-                                FileWriter fichero = new FileWriter(guardado, true)) {
+                            String[] lineas = linea.split("\n");
+                            try (FileWriter fichero = new FileWriter(guardado, true)) {
                                 //Escribimos
-                                fichero.write(linea+"\n");
+                                fichero.write(cab.getCabecera(j, i)+"\n");
+                                for(int k=2;k<lineas.length;k++){
+                                    fichero.write(lineas[k]+"\n");
+                                }
                                 //Cerramos el fichero
                             }catch (IOException ex) {
                                 System.out.println("\nRecreando el fichero de guardado!!!");
@@ -184,6 +191,7 @@ public class Exec_importer extends javax.swing.JFrame {
                     }
                     jProgressBar1.setValue(x1);
                     x1++;
+                    cab.getCabecera(j, i);
                 }
                 imp.setWritter("--- FIN DE IMPORTADO A LA SUBCARPETA: "+(i+2000)+" ---");
                 imp.setWritter("");
@@ -308,6 +316,7 @@ public class Exec_importer extends javax.swing.JFrame {
         
     }
     Utilidades.Importador imp = new Importador();
+    Utilidades.Cabeceras cab = new Cabeceras();
     int indexMesInicio = 0;
     int indexMesFin = 0;
     String[] meses = {"enero", "febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"};
