@@ -1,6 +1,8 @@
 # Importador-MATRAS
 Asistente java para la importación de datos de la estación meteorológica de la universidad de Jaén.
 
+>**Requiere Java 7 y/o superior (para su ejecución y/o compilación)**
+
 ## Modo de uso
 
 Descarga Importador-MATRAS.jar del proyecto principal y ejecútalo. El asistente de importación lo guiará durante todo el proceso.
