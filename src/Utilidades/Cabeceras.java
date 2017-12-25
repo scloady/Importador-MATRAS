@@ -14,6 +14,7 @@ public class Cabeceras {
     String cabeceraMARC1;
     String cabeceraMARC2;
     String cabeceraMARC3;
+    String cabeceraResumen;
     
     /**
      * @Brief constructor por defecto
@@ -22,6 +23,7 @@ public class Cabeceras {
         cabeceraMARC1 = "Fecha,Hora,TempExt,TempMax,TempMin,HumExt,PtoRoc,VelViento,DirViento,RecViento,VelMaxViento,DirMaxViento,SensTermica,IndCalor,IndTHW,IndTHSW,Barometro,Lluvia,IntLluvia,RadSolar,EnerSolar,MaxRadSolar,IndUV,DosisUV,UVMax,GradDCalor,GradDFrio,TemInterior,HumInterior,ET,NumHoja1,TempHoja1,MuestViento,TxViento,RecepIIS,IntArc,";
         cabeceraMARC2 = "Fecha,Hora,TempExt,TempMax,TempMin,HumExt,PtoRoc,VelViento,DirViento,RecViento,VelMaxViento,DirMaxViento,SensTermica,IndCalor,IndTHW,IndTHSW,Barometro,Lluvia,IntLluvia,RadSolar,EnerSolar,MaxRadSolar,IndUV,DosisUV,UVMax,GradDCalor,GradDFrio,TemInterior,HumInterior,RocInterior,IndCalInterior,ET,NumHoja1,TempHoja1,MuestViento,TxViento,RecepIIS,IntArc,";
         cabeceraMARC3 = "Fecha,Hora,TempExt,TempMax,TempMin,HumExt,PtoRoc,VelViento,DirViento,RecViento,VelMaxViento,DirMaxViento,SensTermica,IndCalor,IndTHW,IndTHSW,Barometro,Lluvia,IntLluvia,RadSolar,EnerSolar,MaxRadSolar,IndUV,DosisUV,UVMax,GradDCalor,GradDFrio,TemInterior,HumInterior,RocInterior,IndCalInterior,ET,MuestViento,TxViento,RecepIIS,IntArc,";
+        cabeceraResumen = "Dia,TempMed,TempMax,HoraTempMax,TempMin,HoraTempMin,GradDiaCalor,GradDiaFrio,Lluvia,VelVientoMed,VelVientoMax,HoraVelVientoMax,DireccViento,";
     }
 
     
@@ -45,5 +47,13 @@ public class Cabeceras {
         }
         
         return cabeceraMARC3;
+    }
+    
+    /**
+     * @brief Método que devuelve la cabecera de resumen para insertar en el fichero de importación
+     * @return Cabecera a insertar en el fichero de importación
+     */
+    public String getCabeceraResumen(){
+        return cabeceraResumen;
     }
 }
