@@ -5,9 +5,9 @@
  */
 package GUI;
 
+import Utilidades.Cabeceras;
 import Utilidades.Importador;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -120,14 +120,42 @@ public class Exec_importer extends javax.swing.JFrame {
                         String result = s.hasNext() ? s.next() : "";
                         result = result.replaceAll("\t", ",");
                         String linea=result;
-                        try (
-                            FileWriter fichero = new FileWriter(guardado, true)) {
-                            //Escribimos
-                            fichero.write(linea+"\n");
-                            //Cerramos el fichero
+                        String[] lineas = linea.split("\n");
+                        try (FileWriter fichero = new FileWriter(guardado, true)) {
+                            if(imp.getResumen()){
+                                fichero.write(cab.getCabeceraResumen()+"\n");
+                                boolean marca=false;
+                                for(int k=0;k<lineas.length;k++){
+                                    if(lineas[k].length() - lineas[k].replace("-", "").length()>10){
+                                        marca=!(marca);
+                                    }
+                                    if(marca){
+                                        if(!(lineas[k].length() - lineas[k].replace("-", "").length()>10)){
+                                            //Escribimos desde el inicio hasta el cierre de marca (------ ... -----)
+                                            String[] terminos = lineas[k].split(" ");
+                                            String str = "";
+                                            for(int l=0;l<terminos.length;l++){
+                                                if(!terminos[l].isEmpty())
+                                                    str+=terminos[l]+",";
+                                            }
+                                            //System.out.println(str);
+                                            fichero.write(str);
+                                        }
+                                    }
+                                }
+                            }else{
+                                //Escribimos
+                                fichero.write(cab.getCabecera(j, i)+"\n");
+                                for(int k=2;k<lineas.length;k++){
+                                    fichero.write(lineas[k]+"\n");
+                                }
+                            }
+                            //Cierre del fichero
+                            fichero.close();
                         }catch (IOException ex) {
                             System.out.println("\nRecreando el fichero de guardado!!!");
                         }
+                        //Cerramos el fichero
                         is.close();
                         
                         imp.setWritter("Fichero importado. Ruta "+subcarpeta+"/"+meses[j]+String.format("%02d", i)+".csv");
@@ -162,15 +190,42 @@ public class Exec_importer extends javax.swing.JFrame {
                             String result = s.hasNext() ? s.next() : "";
                             result = result.replaceAll("\t", ",");
                             String linea=result;
-                            try (
-                                FileWriter fichero = new FileWriter(guardado, true)) {
-                                //Escribimos
-                                fichero.write(linea+"\n");
-                                //Cerramos el fichero
+                            String[] lineas = linea.split("\n");
+                            try (FileWriter fichero = new FileWriter(guardado, true)) {
+                                if(imp.getResumen()){
+                                    fichero.write(cab.getCabeceraResumen()+"\n");
+                                    boolean marca=false;
+                                    for(int k=0;k<lineas.length;k++){
+                                        if(lineas[k].length() - lineas[k].replace("-", "").length()>10){
+                                            marca=!(marca);
+                                        }
+                                        if(marca){
+                                            if(!(lineas[k].length() - lineas[k].replace("-", "").length()>10)){
+                                                //Escribimos desde el inicio hasta el cierre de marca (------ ... -----)
+                                                String[] terminos = lineas[k].split(" ");
+                                                String str = "";
+                                                for(int l=0;l<terminos.length;l++){
+                                                    if(!terminos[l].isEmpty())
+                                                        str+=terminos[l]+",";
+                                                }
+                                                //System.out.println(str);
+                                                fichero.write(str);
+                                            }
+                                        }
+                                    }
+                                }else{
+                                    //Escribimos
+                                    fichero.write(cab.getCabecera(j, i)+"\n");
+                                    for(int k=2;k<lineas.length;k++){
+                                        fichero.write(lineas[k]+"\n");
+                                    }
+                                }
+                                //Cierre del fichero
+                                fichero.close();
                             }catch (IOException ex) {
                                 System.out.println("\nRecreando el fichero de guardado!!!");
                             }
-
+                            //Cerramos el fichero
                             is.close();
                             
                             imp.setWritter("Fichero importado. Ruta "+subcarpeta+"/"+meses[j]+String.format("%02d", i)+".csv");
@@ -184,6 +239,7 @@ public class Exec_importer extends javax.swing.JFrame {
                     }
                     jProgressBar1.setValue(x1);
                     x1++;
+                    cab.getCabecera(j, i);
                 }
                 imp.setWritter("--- FIN DE IMPORTADO A LA SUBCARPETA: "+(i+2000)+" ---");
                 imp.setWritter("");
@@ -308,6 +364,7 @@ public class Exec_importer extends javax.swing.JFrame {
         
     }
     Utilidades.Importador imp = new Importador();
+    Utilidades.Cabeceras cab = new Cabeceras();
     int indexMesInicio = 0;
     int indexMesFin = 0;
     String[] meses = {"enero", "febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"};
