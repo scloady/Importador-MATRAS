@@ -5,7 +5,7 @@ Asistente java para la importación de datos de la estación meteorológica de l
 
 ## Modo de uso
 
-Descarga Importador-MATRAS.jar del proyecto principal y ejecútalo. El asistente de importación lo guiará durante todo el proceso.
+Descarga Importador-MATRAS.jar de la rama actual y ejecútalo. El asistente de importación lo guiará durante todo el proceso.
 
 ## Compilado y ejecución
 
