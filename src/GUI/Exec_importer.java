@@ -134,12 +134,12 @@ public class Exec_importer extends javax.swing.JFrame {
                                             //Escribimos desde el inicio hasta el cierre de marca (------ ... -----)
                                             String[] terminos = lineas[k].split(" ");
                                             String str = "";
-                                            for(int l=0;l<terminos.length;l++){
+                                            for(int l=0;l<terminos.length-1;l++){
                                                 if(!terminos[l].isEmpty())
                                                     str+=terminos[l]+",";
                                             }
-                                            //System.out.println(str);
-                                            fichero.write(str);
+                                            //Añadimos el ultimo dato, que contiene el salto de lina incluido
+                                            fichero.write(str+terminos[terminos.length-1]);
                                         }
                                     }
                                 }
@@ -204,12 +204,12 @@ public class Exec_importer extends javax.swing.JFrame {
                                                 //Escribimos desde el inicio hasta el cierre de marca (------ ... -----)
                                                 String[] terminos = lineas[k].split(" ");
                                                 String str = "";
-                                                for(int l=0;l<terminos.length;l++){
+                                                for(int l=0;l<terminos.length-1;l++){
                                                     if(!terminos[l].isEmpty())
                                                         str+=terminos[l]+",";
                                                 }
-                                                //System.out.println(str);
-                                                fichero.write(str);
+                                                //Añadimos el ultimo dato, que contiene el salto de lina incluido
+                                                fichero.write(str+terminos[terminos.length-1]);
                                             }
                                         }
                                     }
